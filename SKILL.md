@@ -99,7 +99,7 @@ python3 $EQ key
 | `steo`(seriesId 1469 个) | value | ⭐ 官方月度预测,含未来 24 个月(BREPUUS/WTIPUUS/MGRARUS…) |
 | `total-energy`(msn 984 个) | value | 全国月度全品种生产/消费/库存/CO2(ELETPUS 电力净发电…) |
 | `crude-oil-imports` | **quantity** | 月度原油进口 by 来源国×品质(gradeId=LSW/MED/HEAVY…),55.7 万行 |
-| `international` | value | 全球产量/消费/进口:productId=**57**(原油), activityId=1 生产/2 消费/3 进口/5 库存, countryRegionTypeId=**c**/r, unit=TBPD/MT/MBBL(需带齐全部维度) |
+| `international` | value | 全球分国数据:**产量 57×1 实测完整**(不带 countryRegionId 即可拉全量国家);消费仅 54×2(年度覆盖 179 国/月度仅 OECD)、进口仅 OECD 系列 78x——存在结构性数据缺口(无中印),详见坑 5/9/10;countryRegionTypeId=**c**(国家) |
 | `natural-gas/pri/sum`、`prod/sum`、`cons/sum`、`sum/snd`、`move/*`、`stor/*` | value | 天然气月度全家桶,与 stor/wkly 同构 |
 | `densified-biomass/*` | **production** 等 | 木质颗粒月报 |
 
@@ -139,3 +139,7 @@ python3 $EQ key
 
 - `data` 命令默认按 period 降序输出 JSON(每行一条),`--csv` 导出全量
 - 所有命令失败时 stderr 输出原因;404/路由变更时先跑上级 `routes` 重新发现入口
+
+## 报告模板
+
+- `templates/intl_top_report.py`:international 三维度(产量/消费/净进口)Top20 HTML 报告生成器(2026-09 实战验证)。含:大区间全量拉取→本地排序 Top20(单页 5000 行内 1 次请求)、5 期 sparkline 趋势、环比/首尾变化着色(涨红跌绿)、中国行高亮、年度多单位过滤(unit=TBPD)、缺数标记(w)处理、数据限制标注。复用时改文件头常量(SRC/OUT/月份区间/口径)。查询策略:先小 limit 探最新 period,再按 period 大区间一次拉全量国家,本地排序取 Top20——不要试图让 API 按 value 排序。

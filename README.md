@@ -61,7 +61,7 @@ python3 scripts/eia_query.py data natural-gas/stor/wkly --freq weekly --facet du
 
 - facets 的 `[]` 必须 URL 编码;`data[0]=<列名>` 必传且**列名因端点而异**(value/quantity/percentOutage/production…)
 - 电力 rto 日级数据不传 timezone facet 会返回 5 份重复
-- 核电 facility、煤炭 sector 的 facet 值是**数字码**;international 必须带齐全部维度
+- 核电 facility、煤炭 sector 的 facet 值是**数字码**;international 存在结构性数据缺口(原油×消费不可查、无全球分国进口、中印不在数据集,详见 SKILL.md 坑5/9/10)
 - **期货价格系列 2024-04 已停更**,现价追踪用现货系列(RWTC / RBRTE / RNGWHHD)
 
 ## License
