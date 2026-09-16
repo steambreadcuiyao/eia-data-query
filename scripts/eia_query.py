@@ -158,11 +158,11 @@ def cmd_meta(args):
         out['facets'] = resp['facets']
     d = resp.get('data')
     if isinstance(d, dict):
-        out['data_columns'] = {k: {'units': v.get('units')} for k, v in d.items()}
-    elif isinstance(d, list):
-        # international 等端点返回 list 形态的 data 列定义
-        out['data_columns'] = {x.get('id'): {'units': x.get('units')}
-                               for x in d if isinstance(x, dict)}
+        # international 等端点的 data 列值可能是 dict(含 units)或 list(单位枚举)
+        out['data_columns'] = {
+            k: ({'units': v.get('units')} if isinstance(v, dict) else {'raw': v})
+            for k, v in d.items()
+        }
     if resp.get('startPeriod') or resp.get('endPeriod'):
         out['coverage'] = {'start': resp.get('startPeriod'), 'end': resp.get('endPeriod')}
     print(json.dumps(out, ensure_ascii=False, indent=2))
