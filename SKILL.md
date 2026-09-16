@@ -120,10 +120,12 @@ python3 $EQ key
 2. **`data[0]=<列名>` 必传且列名因端点而异**:`value`(多数)/`quantity`(crude-oil-imports、coal 进出口)/`percentOutage`(核电)/`production`(生物质)。传错返回 400 并列出合法列名,可借报错自省;或先跑 `meta`。
 3. **日级 rto 端点不传 timezone facet 返回 5 份重复**(每时区一份)。
 4. **facet 值先枚举再查询**:核电 facility 与煤炭 sector 都是数字码;international 用数字 productId 与小写 typeId。
-5. **international 必须带齐 productId+activityId+countryRegionId+countryRegionTypeId**,漏了返回空;部分组合(如原油×消费)官方不提供。
+5. **international 部分组合是数据缺口而非查询错误**(2026-09 实测):原油×消费(57×2)、总油品×消费(53×2)等**全频率 total=0**;全球分国进口不存在(仅 OECD 系列 78x,且仅 8-17 行);月度消费(54×2)仅 36 个 OECD 国家且多为 w 缺数;**中国、印度不在本数据集**(源自 JODI 体系,中印不提交)。产量(57×1)不带 countryRegionId 即可拉全量国家。
 6. **期货价格系列 2024-04 已停更**(RCLC1/RNGC1),现价追踪一律用现货系列(RWTC/RBRTE/RNGWHHD)。
 7. period 格式:年 `YYYY`、季 `YYYY-"Q"Q`、月 `YYYY-MM`、周/日 `YYYY-MM-DD`、小时 `YYYY-MM-DDTHH24`(UTC)/`LH` 后缀(本地)。
 8. 单请求上限 5000 行,需要更多用 `--all` 自动翻页;限流 5,000 次/小时。
+9. **international 年度数据 5 种单位混存**(MT/MTOE/QBTU/TBPD/TJ,每国每年每单位一行),跨单位比较前必须按 `unit=TBPD` 过滤;月度数据仅 TBPD。
+10. **international 月度国际数据发布滞后约 3 个月**(9 月中旬最新为 5 月);年度数据滞后约 1 年。
 
 ## 数据新鲜度(实测)
 

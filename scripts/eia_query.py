@@ -159,6 +159,10 @@ def cmd_meta(args):
     d = resp.get('data')
     if isinstance(d, dict):
         out['data_columns'] = {k: {'units': v.get('units')} for k, v in d.items()}
+    elif isinstance(d, list):
+        # international 等端点返回 list 形态的 data 列定义
+        out['data_columns'] = {x.get('id'): {'units': x.get('units')}
+                               for x in d if isinstance(x, dict)}
     if resp.get('startPeriod') or resp.get('endPeriod'):
         out['coverage'] = {'start': resp.get('startPeriod'), 'end': resp.get('endPeriod')}
     print(json.dumps(out, ensure_ascii=False, indent=2))
