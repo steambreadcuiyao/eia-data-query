@@ -1,0 +1,6 @@
+{
+  "display_name": "EIA 美国能源数据查询",
+  "display_name_en": "EIA Open Data Query",
+  "description_zh": "查询美国能源信息署(EIA) API v2 全部数据:石油/天然气/电力/煤炭/核电停运/能源价格/STEO预测/州数据/国际数据,首次使用需配置 API Key",
+  "description_en": "Query all EIA API v2 datasets: petroleum, natural gas, electricity, coal, nuclear outages, prices, STEO, SEDS, international. API key setup required on first use"
+}
